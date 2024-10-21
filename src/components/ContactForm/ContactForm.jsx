@@ -1,9 +1,10 @@
 import { useId } from "react";
 import { Formik, Form, Field } from "formik";
 import { ErrorMessage } from "formik";
-import { nanoid } from "nanoid";
+
 import { useDispatch } from "react-redux";
-import { addContact } from "../../redux/contactsSlice";
+import { addContact } from "../../redux/contactsOps";
+
 import * as Yup from "yup";
 import css from "./ContactForm.module.css";
 
@@ -18,12 +19,12 @@ export default function ContactForm() {
       .max(50, "To long!")
       .required("Required"),
     number: Yup.string()
-      .matches(/^\d{3}-\d{2}-\d{2}$/, "Must be XXX-XX-XX")
+      .matches(/^\d{3}-\d{3}-\d{4}$/, "Must be XXX-XXX-XXXX")
       .required("Required"),
   });
 
   function handleSubmit(values, actions) {
-    const newContact = { ...values, id: nanoid() };
+    const newContact = { ...values };
 
     dispatch(addContact(newContact));
 
@@ -51,7 +52,7 @@ export default function ContactForm() {
           type="text"
           name="number"
           id={fieldNumberId}
-          placeholder="XXX-XX-XX"
+          placeholder="XXX-XXX-XXXX"
           autoComplete="off"
         ></Field>
         <ErrorMessage className={css.errorText} name="number" component="p" />
